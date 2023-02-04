@@ -9,7 +9,9 @@ const Home = observer(function Home() {
 	return (
 		<div>
 			<div>user address: {userAddress}</div>
-			<div>user balance: {balance.amount}</div>
+			<div>
+				user balance: {balance.amount} {balance.symbol}
+			</div>
 			<button
 				type='button'
 				onClick={() =>

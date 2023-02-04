@@ -6,9 +6,9 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { polygonMumbai } from 'wagmi/chains';
 
 // pages
-import Home from '@pages/Home';
 import ErrorBoundary from '@components/ErrorBoundary';
 import Web3Provider from '@contexts/web3Context';
+import Routes from '@routes/index';
 
 export const preferredChain = polygonMumbai;
 
@@ -34,7 +34,7 @@ function App() {
 		<ErrorBoundary>
 			<WagmiConfig client={client}>
 				<Web3Provider>
-					<Home />
+					<Routes />
 				</Web3Provider>
 			</WagmiConfig>
 		</ErrorBoundary>

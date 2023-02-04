@@ -12,6 +12,7 @@ export class Web3Store {
 		userAddress: undefined,
 		balance: {
 			amount: null,
+			symbol: undefined,
 			isLoading: false,
 			isError: false,
 		},
@@ -29,6 +30,7 @@ export class Web3Store {
 
 			if (account.address && account.isConnected) {
 				this.setUserAddress(account.address);
+				this.fetchWalletBalance();
 			} else if (account.isDisconnected) {
 				this.resetStore();
 			}
@@ -45,7 +47,10 @@ export class Web3Store {
 				});
 
 				console.log({ balance });
-				this.setBalanceState({ amount: balance?.formatted });
+				this.setBalanceState({
+					amount: balance?.formatted,
+					symbol: balance?.symbol,
+				});
 			} catch (error) {
 				console.log(error);
 				this.setBalanceState({ isError: true });
@@ -59,6 +64,7 @@ export class Web3Store {
 		this.state.userAddress = undefined;
 		this.state.balance = {
 			amount: null,
+			symbol: undefined,
 			isLoading: false,
 			isError: false,
 		};
@@ -70,10 +76,12 @@ export class Web3Store {
 
 	setBalanceState({
 		amount,
+		symbol = 'default value',
 		isError,
 		isLoading,
 	}: Partial<IWeb3StoreState['balance']>) {
 		if (amount !== undefined) this.state.balance.amount = amount;
+		if (symbol !== 'default value') this.state.balance.symbol = symbol;
 		if (isError !== undefined) this.state.balance.isError = isError;
 		if (isLoading !== undefined) this.state.balance.isLoading = isLoading;
 	}
@@ -86,22 +94,3 @@ export class Web3Store {
 		return this.state.balance;
 	}
 }
-
-// With the function below you can limit the value to be the one for that particular key.
-
-// function setAttribute<T extends Object, U extends keyof T>(obj: T, key: U, value: T[U]) {
-//     obj[key] = value;
-// }
-// Example
-
-// interface Pet {
-//      name: string;
-//      age: number;
-// }
-
-// const dog: Pet = { name: 'firulais', age: 8 };
-
-// setAttribute(dog, 'name', 'peluche')     <-- Works
-// setAttribute(dog, 'name', 100)           <-- Error (number is not string)
-// setAttribute(dog, 'age', 2)              <-- Works
-// setAttribute(dog, 'lastname', '')        <-- Error (lastname is not a property)
