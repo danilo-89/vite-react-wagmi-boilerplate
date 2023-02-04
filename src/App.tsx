@@ -1,34 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { configureChains, createClient, WagmiConfig } from 'wagmi';
+import { publicProvider } from 'wagmi/providers/public';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { infuraProvider } from 'wagmi/providers/infura';
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
+import { polygonMumbai } from 'wagmi/chains';
+
+// pages
+import Home from '@pages/Home';
+import ErrorBoundary from '@components/ErrorBoundary';
+import Web3Provider from '@contexts/web3Context';
+
+export const preferredChain = polygonMumbai;
+
+const { chains, provider, webSocketProvider } = configureChains(
+	[preferredChain],
+	[
+		publicProvider({ priority: 2 }),
+		// alchemyProvider({ apiKey: alchemyId, priority: 0 }),
+		// infuraProvider({ apiKey: infuraId, priority: 1 }),
+	],
+	{ pollingInterval: 3000 }
+);
+
+const client = createClient({
+	autoConnect: true,
+	connectors: [new MetaMaskConnector({ chains })],
+	provider,
+	webSocketProvider,
+});
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+	return (
+		<ErrorBoundary>
+			<WagmiConfig client={client}>
+				<Web3Provider>
+					<Home />
+				</Web3Provider>
+			</WagmiConfig>
+		</ErrorBoundary>
+	);
 }
 
-export default App
+export default App;

@@ -1,0 +1,90 @@
+{
+	"extends": [],
+	"ignorePatterns": ["!**/*"],
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+			"extends": [
+				"plugin:react/recommended",
+				"airbnb",
+				"airbnb/hooks",
+				"plugin:import/errors",
+				"plugin:jsx-a11y/recommended",
+				"prettier",
+				"plugin:import/typescript",
+				"plugin:@typescript-eslint/recommended",
+				"plugin:mobx/recommended"
+			],
+			"rules": {
+				"react/no-unescaped-entities": 0,
+				"max-len": 0,
+				"react/jsx-props-no-spreading": "off",
+				"react/no-array-index-key": 0,
+				"import/extensions": "off",
+				"import/no-extraneous-dependencies": [
+					"error",
+					{ "devDependencies": true }
+				],
+				"no-use-before-define": "off",
+				"@typescript-eslint/no-use-before-define": ["error"],
+				"react/jsx-filename-extension": [
+					2,
+					{ "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+				],
+				"import/prefer-default-export": "off",
+				"react/destructuring-assignment": "off",
+				"@typescript-eslint/ban-ts-comment": "off",
+				"@typescript-eslint/no-explicit-any": "off",
+				"@typescript-eslint/explicit-module-boundary-types": "off",
+				"no-console": "off",
+				"camelcase": "off",
+				"react/require-default-props": "off",
+				"arrow-body-style": "off",
+				"@typescript-eslint/consistent-type-assertions": "off",
+				"import/export": "off",
+				"no-restricted-exports": "off",
+				"import/no-unresolved": "off",
+				"react/react-in-jsx-scope": "off",
+				"import/no-named-as-default": "off",
+				"react/function-component-definition": "off",
+				"class-methods-use-this": "off",
+				"max-classes-per-file": "off",
+				"prefer-arrow-callback": "off",
+				// these values are the same as recommended
+				"mobx/exhaustive-make-observable": "warn",
+				"mobx/unconditional-make-observable": "error",
+				"mobx/missing-make-observable": "error",
+				"mobx/missing-observer": "warn",
+				"mobx/no-anonymous-observer": "warn",
+				"react/display-name": "warn"
+			},
+			"settings": {
+				"componentWrapperFunctions": ["observer"]
+			},
+			"env": {
+				"browser": true,
+				"es2021": true
+			},
+			"parser": "@typescript-eslint/parser",
+			"parserOptions": {
+				"ecmaFeatures": {
+					"jsx": true
+				},
+				"ecmaVersion": 12,
+				"sourceType": "module"
+			},
+			"plugins": ["react", "@typescript-eslint"],
+			"globals": {
+				"JSX": true
+			}
+		},
+		{
+			"files": ["*.ts", "*.tsx"],
+			"rules": {}
+		},
+		{
+			"files": ["*.js", "*.jsx"],
+			"rules": {}
+		}
+	]
+}

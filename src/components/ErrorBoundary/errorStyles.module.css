@@ -1,0 +1,32 @@
+.errorContainer {
+	background-color: #131313;
+	color: #f9f9f9;
+	padding: 5px 15px;
+	font-family: sans-serif;
+	margin-right: auto;
+	margin-left: auto;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.errorContainer h1 {
+	font-size: 32px;
+	text-align: center;
+	margin-bottom: 48px;
+}
+
+.errorContainer p {
+	font-size: 16px;
+	text-align: center;
+}
+
+.errorContainer a {
+	color: #31b5ff;
+}
+
+.errorContainer span {
+	color: #e15252;
+	font-weight: bold;
+}
