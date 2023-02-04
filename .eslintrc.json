@@ -50,11 +50,11 @@
 				"class-methods-use-this": "off",
 				"max-classes-per-file": "off",
 				"prefer-arrow-callback": "off",
-				// these values are the same as recommended
+				// these values are the same as recommended (modified)
 				"mobx/exhaustive-make-observable": "warn",
 				"mobx/unconditional-make-observable": "error",
 				"mobx/missing-make-observable": "error",
-				"mobx/missing-observer": "warn",
+				"mobx/missing-observer": "off",
 				"mobx/no-anonymous-observer": "warn",
 				"react/display-name": "warn"
 			},
