@@ -39,6 +39,13 @@ export class Web3Store {
 	}
 
 	*fetchWalletBalance(): any {
+		// prevent multiple calls
+		if (this.balance.isLoading) {
+			console.log('fetching ballance already in progress');
+			return;
+		}
+
+		// fetch if user is logged in
 		if (this.userAddress) {
 			this.setBalanceState({ isLoading: true, isError: false });
 			try {
