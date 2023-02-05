@@ -3,7 +3,12 @@ import { configure, makeAutoObservable, runInAction } from 'mobx';
 import { IWeb3StoreState } from 'types/web3StoreTypes';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { watchAccount, fetchBalance } from '@wagmi/core';
+import {
+	getAccount,
+	disconnect,
+	watchAccount,
+	fetchBalance,
+} from '@wagmi/core';
 
 configure({ observableRequiresReaction: true });
 
@@ -25,6 +30,15 @@ export class Web3Store {
 
 	initiateWatchAccount() {
 		console.log('INITIATE WATCH ACCOUNT');
+
+		// failsafe check - if wallet is connected,
+		// but for some reason this.userAddress is undefined
+		const { isConnected, isConnecting } = getAccount();
+		if (isConnected && !isConnecting && !this.userAddress) {
+			disconnect();
+		}
+
+		// event listener for account connect/disconnect
 		const unwatch = watchAccount((account) => {
 			console.log('INSIDE WATCH ACCOUNT', account);
 
