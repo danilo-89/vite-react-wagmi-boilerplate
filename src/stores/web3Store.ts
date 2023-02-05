@@ -28,7 +28,7 @@ export class Web3Store {
 		const unwatch = watchAccount((account) => {
 			console.log('INSIDE WATCH ACCOUNT', account);
 
-			if (account.address && account.isConnected) {
+			if (account.isConnected) {
 				this.setUserAddress(account.address);
 				this.fetchWalletBalance();
 			} else if (account.isDisconnected) {

@@ -8,6 +8,7 @@ import {
 import { useWeb3 } from '@contexts/web3Context';
 import Layout from '@components/Layout/Layout';
 import Home from '@pages/Home';
+import Header from '@components/Header';
 
 const Routes = observer(function Routes() {
 	const web3store = useWeb3();
@@ -15,7 +16,7 @@ const Routes = observer(function Routes() {
 	return (
 		<Suspense fallback={<div>loading...</div>}>
 			<Router>
-				<div>navigation</div>
+				<Header />
 				<Suspense fallback={<div>loading...</div>}>
 					<BRoutes>
 						<Route element={<Layout />}>

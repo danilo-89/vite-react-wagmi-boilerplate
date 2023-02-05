@@ -1,4 +1,3 @@
-import Connect from '@components/Connect';
 import { useWeb3 } from '@contexts/web3Context';
 import { observer } from 'mobx-react-lite';
 
@@ -23,7 +22,6 @@ const Home = observer(function Home() {
 			<button type='button' onClick={fetchWalletBalance}>
 				Fetch Balance
 			</button>
-			<Connect />
 		</div>
 	);
 });
