@@ -2,13 +2,12 @@ import { BigNumber } from 'ethers';
 import { configure, makeAutoObservable, runInAction } from 'mobx';
 import { IWeb3StoreState } from 'types/web3StoreTypes';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 import {
 	getAccount,
 	disconnect,
 	watchAccount,
 	fetchBalance,
-} from '@wagmi/core';
+} from 'wagmi/actions';
 
 configure({ observableRequiresReaction: true });
 
@@ -34,6 +33,7 @@ export class Web3Store {
 		// failsafe check - if wallet is connected,
 		// but for some reason this.userAddress is undefined
 		const { isConnected, isConnecting } = getAccount();
+		// TODO: also check if this.userAddress===address
 		if (isConnected && !isConnecting && !this.userAddress) {
 			disconnect();
 		}
@@ -80,6 +80,8 @@ export class Web3Store {
 			}
 		}
 	}
+
+	// const throttled = _.throttle(() => console.log('test'), 7000, {trailing: false});
 
 	resetStore() {
 		this.state.userAddress = undefined;
