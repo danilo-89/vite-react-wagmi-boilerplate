@@ -5,7 +5,11 @@ import {
 	Routes as BRoutes,
 	Route,
 } from 'react-router-dom';
+
+// stores
 import { useWeb3 } from '@contexts/web3Context';
+
+// components
 import Layout from '@components/Layout/Layout';
 import Home from '@pages/Home';
 import Header from '@components/Header';

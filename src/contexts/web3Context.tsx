@@ -21,10 +21,15 @@ const Web3Provider = observer(function Web3Provider({
 	console.log('context refreshed');
 	console.log({ Web3Context });
 
+	// subs/unsub listeners
 	useEffect(() => {
-		const unwatch = web3Store.initiateWatchAccount();
+		const unwatchNetwork = web3Store.initiateWatchNetwork();
+		const unwatchAccount = web3Store.initiateWatchAccount();
 
-		return () => unwatch();
+		return () => {
+			unwatchNetwork();
+			unwatchAccount();
+		};
 	}, []);
 
 	// 0x326C977E6efc84E512bB9C30f76E30c160eD06FB

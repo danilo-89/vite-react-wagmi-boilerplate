@@ -6,7 +6,9 @@ import {
 	getAccount,
 	disconnect,
 	watchAccount,
+	watchNetwork,
 	fetchBalance,
+	getNetwork,
 } from 'wagmi/actions';
 
 configure({ observableRequiresReaction: true });
@@ -25,6 +27,20 @@ export class Web3Store {
 	constructor() {
 		makeAutoObservable(this, undefined, { autoBind: true });
 		// this.testWatch();
+	}
+
+	// TODO: initiateWatchNetwork
+	initiateWatchNetwork() {
+		console.log('INITIATE WATCH NETWORK');
+
+		const { chain, chains } = getNetwork();
+		console.log({ chain, chains });
+
+		// event listener for account connect/disconnect
+		const unwatch = watchNetwork((network) => {
+			console.log('INSIDE WATCH NETWORK', network);
+		});
+		return unwatch;
 	}
 
 	initiateWatchAccount() {
