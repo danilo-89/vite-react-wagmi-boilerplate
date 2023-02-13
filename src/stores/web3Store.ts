@@ -31,10 +31,9 @@ export class Web3Store {
 		console.log('INITIATE WATCH ACCOUNT');
 
 		// failsafe check - if wallet is connected,
-		// but for some reason this.userAddress is undefined
-		const { isConnected, isConnecting } = getAccount();
-		// TODO: also check if this.userAddress===address
-		if (isConnected && !isConnecting && !this.userAddress) {
+		// but for some reason this.userAddress !== address
+		const { isConnected, isConnecting, address } = getAccount();
+		if (isConnected && !isConnecting && this.userAddress !== address) {
 			disconnect();
 		}
 
