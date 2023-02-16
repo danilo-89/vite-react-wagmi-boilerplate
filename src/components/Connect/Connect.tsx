@@ -6,7 +6,8 @@ const Connect = () => {
 		useConnect();
 	const { disconnect } = useDisconnect();
 
-	const metamaskAvaiable = typeof window.ethereum !== 'undefined';
+	const metamaskAvaiable =
+		typeof window.ethereum !== 'undefined' && window.ethereum?.isMetaMask;
 	const filteredConnectors =
 		connectors?.filter((x) => x.ready && x.id !== activeConnector?.id) || [];
 
