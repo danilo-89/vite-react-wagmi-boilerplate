@@ -86,6 +86,7 @@ export class Web3Store {
 				this.setBalanceState({
 					amount: balance?.formatted,
 					symbol: balance?.symbol,
+					isError: false,
 				});
 			} catch (error) {
 				console.log(error);
