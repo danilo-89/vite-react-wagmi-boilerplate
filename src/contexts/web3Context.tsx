@@ -27,6 +27,7 @@ const Web3Provider = observer(function Web3Provider({
 		const unwatchAccount = web3Store.initiateWatchAccount();
 
 		return () => {
+			web3Store.resetStore();
 			unwatchNetwork();
 			unwatchAccount();
 		};
