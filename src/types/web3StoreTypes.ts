@@ -20,4 +20,5 @@ export interface IWeb3StoreActions {
 		isError,
 		isLoading,
 	}: Partial<IWeb3StoreState['balance']>) => void;
+	getTruncatedAddress: () => string;
 }

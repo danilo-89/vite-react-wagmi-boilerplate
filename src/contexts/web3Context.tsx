@@ -3,6 +3,7 @@ import { web3Store } from '@stores/web3Store';
 import { useStore } from 'zustand';
 
 // const web3Store = new Web3Store();
+// https://medium.com/@nfailla93/zustand-in-react-dos-and-donts-5a608c26c68
 
 interface IProviderProps {
 	children: JSX.Element | JSX.Element[] | React.ReactNode;
@@ -40,7 +41,8 @@ const Web3Provider = ({ children }: IProviderProps) => {
 			unwatchNetwork();
 			unwatchAccount();
 		};
-	}, [initiateWatchAccount, initiateWatchNetwork, resetStore]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	// 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
 

@@ -13,6 +13,7 @@ import {
 	fetchBalance,
 	getNetwork,
 } from 'wagmi/actions';
+import { truncateAddress } from '@utils/format';
 
 // export const useApplicationState = create<ApplicationState>((set, get) => {
 
@@ -60,6 +61,7 @@ export const web3Store = createStore<IWeb3Store>((set, get) => ({
 				set({ userAddress: account.address });
 				get().fetchWalletBalance();
 			} else if (account.isDisconnected) {
+				console.log('ACCOUNT DISCONNECTED');
 				get().resetStore();
 			}
 		});
@@ -117,6 +119,10 @@ export const web3Store = createStore<IWeb3Store>((set, get) => ({
 
 	setUserAddress: (address: `0x${string}` | undefined) => {
 		set({ userAddress: address });
+	},
+
+	getTruncatedAddress: () => {
+		return truncateAddress(get().userAddress);
 	},
 
 	resetStore: () => {

@@ -33,6 +33,14 @@ const Balance = () => {
 	);
 };
 
+const Truncated = () => {
+	const getTruncatedAddress = useStore(useWeb3()!, (state) =>
+		state.getTruncatedAddress()
+	);
+
+	return <div>truncated address: {getTruncatedAddress}</div>;
+};
+
 const Home = () => {
 	const userAddress = useStore(useWeb3()!, (state) => state.userAddress);
 	const fetchWalletBalance = useStore(
@@ -43,6 +51,7 @@ const Home = () => {
 	return (
 		<div>
 			<div>user address: {userAddress}</div>
+			<Truncated />
 			<Balance />
 			<button type='button' onClick={fetchWalletBalance}>
 				Fetch Balance
