@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { observer } from 'mobx-react-lite';
 import {
 	BrowserRouter as Router,
 	Routes as BRoutes,
@@ -14,9 +13,8 @@ import Layout from '@components/Layout/Layout';
 import Home from '@pages/Home';
 import Header from '@components/Header';
 
-const Routes = observer(function Routes() {
+const Routes = () => {
 	const web3store = useWeb3();
-
 	return (
 		<Suspense fallback={<div>loading...</div>}>
 			<Router>
@@ -35,5 +33,5 @@ const Routes = observer(function Routes() {
 			</Router>
 		</Suspense>
 	);
-});
+};
 export default Routes;

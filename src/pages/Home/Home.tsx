@@ -1,15 +1,17 @@
-import { observer } from 'mobx-react-lite';
-
 // stores
 import { useWeb3 } from '@contexts/web3Context';
+import { useStore } from 'zustand';
 
-const Home = observer(function Home() {
-	const { userAddress, fetchWalletBalance, balance, setBalanceState } =
-		useWeb3()!;
+const Balance = () => {
+	const setBalanceState = useStore(
+		useWeb3()!,
+		(state) => state.setBalanceState
+	);
+	const resetStore = useStore(useWeb3()!, (state) => state.resetStore);
+	const balance = useStore(useWeb3()!, (state) => state.balance);
 
 	return (
 		<div>
-			<div>user address: {userAddress}</div>
 			<div>
 				user balance: {balance.amount} {balance.symbol}
 			</div>
@@ -24,11 +26,29 @@ const Home = observer(function Home() {
 			>
 				test Balance
 			</button>
+			<button type='button' onClick={() => resetStore()}>
+				reset State
+			</button>
+		</div>
+	);
+};
+
+const Home = () => {
+	const userAddress = useStore(useWeb3()!, (state) => state.userAddress);
+	const fetchWalletBalance = useStore(
+		useWeb3()!,
+		(state) => state.fetchWalletBalance
+	);
+
+	return (
+		<div>
+			<div>user address: {userAddress}</div>
+			<Balance />
 			<button type='button' onClick={fetchWalletBalance}>
 				Fetch Balance
 			</button>
 		</div>
 	);
-});
+};
 
 export default Home;

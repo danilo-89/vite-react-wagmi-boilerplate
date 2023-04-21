@@ -1,6 +1,9 @@
-import { BigNumber } from 'ethers';
-import { configure, makeAutoObservable, runInAction } from 'mobx';
-import { IWeb3StoreState } from 'types/web3StoreTypes';
+// import { BigNumber } from 'ethers';
+import { IWeb3StoreActions, IWeb3StoreState } from 'types/web3StoreTypes';
+import { createStore } from 'zustand';
+import { produce } from 'immer';
+
+// import { combine } from 'zustand/middleware';
 
 import {
 	getAccount,
@@ -11,45 +14,41 @@ import {
 	getNetwork,
 } from 'wagmi/actions';
 
-configure({ observableRequiresReaction: true });
+// export const useApplicationState = create<ApplicationState>((set, get) => {
 
-export class Web3Store {
-	private state: IWeb3StoreState = {
-		userAddress: undefined,
-		balance: {
-			amount: null,
-			symbol: undefined,
-			isLoading: false,
-			isError: false,
-		},
-	};
+const initialState: IWeb3StoreState = {
+	userAddress: undefined,
+	balance: {
+		amount: null,
+		symbol: undefined,
+		isLoading: false,
+		isError: false,
+	},
+};
 
-	constructor() {
-		makeAutoObservable(this, undefined, { autoBind: true });
-		// this.testWatch();
-	}
+interface IWeb3Store extends IWeb3StoreState, IWeb3StoreActions {}
 
-	// TODO: initiateWatchNetwork
-	initiateWatchNetwork() {
+export const web3Store = createStore<IWeb3Store>((set, get) => ({
+	...initialState,
+	initiateWatchNetwork: () => {
 		console.log('INITIATE WATCH NETWORK');
-
 		const { chain, chains } = getNetwork();
 		console.log({ chain, chains });
 
-		// event listener for account connect/disconnect
+		// event listener for network change
 		const unwatch = watchNetwork((network) => {
 			console.log('INSIDE WATCH NETWORK', network);
 		});
 		return unwatch;
-	}
+	},
 
-	initiateWatchAccount() {
+	initiateWatchAccount: () => {
 		console.log('INITIATE WATCH ACCOUNT');
 
 		// failsafe check - if wallet is connected,
 		// but for some reason this.userAddress !== address
 		const { isConnected, isConnecting, address } = getAccount();
-		if (isConnected && !isConnecting && this.userAddress !== address) {
+		if (isConnected && !isConnecting && get().userAddress !== address) {
 			disconnect();
 		}
 
@@ -58,77 +57,89 @@ export class Web3Store {
 			console.log('INSIDE WATCH ACCOUNT', account);
 
 			if (account.isConnected) {
-				this.setUserAddress(account.address);
-				this.fetchWalletBalance();
+				set({ userAddress: account.address });
+				get().fetchWalletBalance();
 			} else if (account.isDisconnected) {
-				this.resetStore();
+				get().resetStore();
 			}
 		});
 		return unwatch;
-	}
+	},
 
-	*fetchWalletBalance(): any {
+	fetchWalletBalance: async () => {
+		console.log('fetch balance function');
+
 		// prevent multiple calls
-		if (this.balance.isLoading) {
-			console.log('fetching ballance already in progress');
+		if (get().balance.isLoading) {
+			console.log('fetching balance already in progress');
 			return;
 		}
 
+		console.log('fetching');
+
+		const address = get().userAddress;
+
 		// fetch if user is logged in
-		if (this.userAddress) {
-			this.setBalanceState({ isLoading: true, isError: false });
+		if (address) {
+			get().setBalanceState({
+				isLoading: true,
+				isError: false,
+			});
 			try {
-				const balance = yield fetchBalance({
-					address: this.userAddress,
+				const balance = await fetchBalance({
+					address,
 				});
 
 				console.log({ balance });
-				this.setBalanceState({
+				// set({
+				// 	balance: {
+				// 		...get().balance,
+				// 		amount: balance?.formatted,
+				// 		symbol: balance?.symbol,
+				// 	},
+				// });
+				get().setBalanceState({
 					amount: balance?.formatted,
 					symbol: balance?.symbol,
 				});
 			} catch (error) {
 				console.log(error);
-				this.setBalanceState({ isError: true });
+				get().setBalanceState({
+					isError: true,
+				});
 			} finally {
-				this.setBalanceState({ isLoading: false });
+				get().setBalanceState({
+					isLoading: false,
+				});
 			}
 		}
-	}
+	},
 
-	// const throttled = _.throttle(() => console.log('test'), 7000, {trailing: false});
+	setUserAddress: (address: `0x${string}` | undefined) => {
+		set({ userAddress: address });
+	},
 
-	resetStore() {
-		this.state.userAddress = undefined;
-		this.state.balance = {
-			amount: null,
-			symbol: undefined,
-			isLoading: false,
-			isError: false,
-		};
-	}
+	resetStore: () => {
+		set(initialState);
+	},
 
-	setUserAddress(address_: `0x${string}` | undefined) {
-		this.state.userAddress = address_;
-	}
-
-	setBalanceState({
+	setBalanceState: ({
 		amount,
 		symbol = 'default value',
 		isError,
 		isLoading,
-	}: Partial<IWeb3StoreState['balance']>) {
-		if (amount !== undefined) this.state.balance.amount = amount;
-		if (symbol !== 'default value') this.state.balance.symbol = symbol;
-		if (isError !== undefined) this.state.balance.isError = isError;
-		if (isLoading !== undefined) this.state.balance.isLoading = isLoading;
-	}
-
-	get userAddress() {
-		return this.state.userAddress;
-	}
-
-	get balance() {
-		return this.state.balance;
-	}
-}
+	}: Partial<IWeb3StoreState['balance']>) => {
+		set(
+			produce((state) => ({
+				balance: {
+					// ...state.balance,
+					amount: amount !== undefined ? amount : state.balance.amount,
+					symbol: symbol !== 'default value' ? symbol : state.balance.symbol,
+					isError: isError !== undefined ? isError : state.balance.isError,
+					isLoading:
+						isLoading !== undefined ? isLoading : state.balance.isLoading,
+				},
+			}))
+		);
+	},
+}));
