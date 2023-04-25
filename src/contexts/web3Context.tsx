@@ -19,19 +19,19 @@ const Web3Provider = ({ children }: IProviderProps) => {
 	// const unsub = store.fetchFieldsData();
 
 	// initiate store once
-	const store = useRef(createWeb3Store());
+	const store = useRef(createWeb3Store()).current;
 
 	console.log('context refreshed');
 	const initiateWatchNetwork = useStore(
-		store.current,
+		store,
 		(state) => state.initiateWatchNetwork
 	);
 	const initiateWatchAccount = useStore(
-		store.current,
+		store,
 		(state) => state.initiateWatchAccount
 	);
 
-	const resetStore = useStore(store.current, (state) => state.resetStore);
+	const resetStore = useStore(store, (state) => state.resetStore);
 
 	// subscribe/unsubscribe listeners
 	useEffect(() => {
@@ -50,11 +50,7 @@ const Web3Provider = ({ children }: IProviderProps) => {
 
 	// 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
 
-	return (
-		<Web3Context.Provider value={store.current}>
-			{children}
-		</Web3Context.Provider>
-	);
+	return <Web3Context.Provider value={store}>{children}</Web3Context.Provider>;
 };
 
 // 3. custom hook for using context
