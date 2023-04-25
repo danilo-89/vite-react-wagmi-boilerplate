@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect } from 'react';
-import { web3Store } from '@stores/web3Store';
+import { createContext, useContext, useEffect, useRef } from 'react';
+import { createWeb3Store } from '@stores/web3Store';
 import { useStore } from 'zustand';
 
 // const web3Store = new Web3Store();
@@ -10,26 +10,30 @@ interface IProviderProps {
 }
 
 // 1. creating context
-const Web3Context = createContext<typeof web3Store | null>(null);
+const Web3Context = createContext<ReturnType<typeof createWeb3Store> | null>(
+	null
+);
 
 // 2. defining Provider component for wrapping components that need to use context
-// eslint-disable-next-line prefer-arrow-callback
 const Web3Provider = ({ children }: IProviderProps) => {
 	// const unsub = store.fetchFieldsData();
 
+	// initiate store once
+	const store = useRef(createWeb3Store());
+
 	console.log('context refreshed');
 	const initiateWatchNetwork = useStore(
-		web3Store,
+		store.current,
 		(state) => state.initiateWatchNetwork
 	);
 	const initiateWatchAccount = useStore(
-		web3Store,
+		store.current,
 		(state) => state.initiateWatchAccount
 	);
 
-	const resetStore = useStore(web3Store, (state) => state.resetStore);
+	const resetStore = useStore(store.current, (state) => state.resetStore);
 
-	// subs/unsub listeners
+	// subscribe/unsubscribe listeners
 	useEffect(() => {
 		console.log('subbed');
 		const unwatchNetwork = initiateWatchNetwork();
@@ -47,7 +51,9 @@ const Web3Provider = ({ children }: IProviderProps) => {
 	// 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
 
 	return (
-		<Web3Context.Provider value={web3Store}>{children}</Web3Context.Provider>
+		<Web3Context.Provider value={store.current}>
+			{children}
+		</Web3Context.Provider>
 	);
 };
 
