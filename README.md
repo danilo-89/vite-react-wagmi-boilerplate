@@ -6,5 +6,5 @@ Stack:
 - [React](https://github.com/facebook/react/)
 - [TypeScript](https://github.com/microsoft/TypeScript/)
 - [Wagmi](https://github.com/wagmi-dev/wagmi)
-- [Mobx](https://github.com/mobxjs/mobx)
+- [Mobx](https://github.com/mobxjs/mobx) / [Zustand](https://github.com/pmndrs/zustand)
 - [React Router](https://github.com/remix-run/react-router)
