@@ -6,6 +6,7 @@ A boilerplate for developing web3 applications for interacting with the Ethereum
 ## Instructions
 
 run `yarn` to install dependencies
+
 run `yarn dev` to start project in dev environment
 
 - **main** branch - MobX store
